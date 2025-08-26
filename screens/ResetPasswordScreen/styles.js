@@ -8,34 +8,34 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     padding: 16,
+    paddingTop: 20, 
   },
   backButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
-    marginTop: 40,
+    marginBottom: 30, 
   },
   backArrow: {
-  fontSize: 28,      
-  color: '#000',
-  lineHeight: 28,    
-  marginRight: 6,    
-},
+    fontSize: 28,
+    color: '#000',
+    lineHeight: 100,
+    marginRight: 10,
+  },
   backButtonText: {
-  color: '#000',
-  fontSize: 18,      
-},
+    color: '#000',
+    fontSize: 18,
+  },
   content: {
-    flex: 1,
-    justifyContent: 'center',
+    marginTop: 10, 
   },
   header: {
     marginBottom: 16,
     alignItems: 'center',
   },
   headerText: {
-    fontSize: 28,
+    fontSize: 40,
     fontWeight: '700',
+    textAlign: 'center',
     color: '#000000',
   },
   subtitle: {
