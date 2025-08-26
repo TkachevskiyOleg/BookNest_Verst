@@ -129,23 +129,6 @@ const LoginScreen = () => {
             </TouchableOpacity>
           </View>
         </View>
-
-
-        
-        <TouchableOpacity
-          onPress={() => navigation.navigate('ResetPassword')}
-        >
-          <Text>Перейти до скидання пароля</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Verification')}
-        >
-          <Text>Перейти до верифікації</Text>
-        </TouchableOpacity>
-
-
-
         <View style={styles.registerRedirect}>
           <Text style={styles.registerText}>Ще не маєте акаунта? </Text>
           <TouchableOpacity onPress={() => navigation.navigate('Register')}>
