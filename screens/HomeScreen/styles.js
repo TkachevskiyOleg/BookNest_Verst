@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: 60,
   },
-  // Стилі для рекомендованої книги
   recommendedSection: {
     paddingHorizontal: 16,
     marginTop: 20,
@@ -98,7 +97,6 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 8,
   },
-  // Категорії
   categoriesWrapper: {
     height: 50,
     marginVertical: 16,
@@ -129,8 +127,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '600',
   },
-  // Стилі для блоку "Читати далі"
-  currentReadingSection: {
+    currentReadingSection: {
     paddingHorizontal: 16,
     marginTop: 20,
   },
