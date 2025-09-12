@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   blockTitle: { fontSize: 16, fontWeight: '700', color: '#0F0F0F', marginBottom: 10 },
 
-  // Chips
+  // Chips - ОНОВЛЕНО
   chipsRow: { flexDirection: 'row', flexWrap: 'wrap' },
   chip: {
     paddingVertical: 8,
@@ -112,12 +112,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'transparent',
   },
-  chipActive: { backgroundColor: '#FFFFFF', borderColor: '#2E8B57', borderWidth: 2 },
+  chipActive: { backgroundColor: '#008655', borderColor: '#008655' }, // ОНОВЛЕНО
   chipText: { color: '#0F0F0F', fontSize: 14, fontWeight: '600' },
-  chipTextActive: { color: '#2E8B57', fontWeight: '700' },
+  chipTextActive: { color: '#F1F1F1', fontWeight: '700' }, // ОНОВЛЕНО
 
-  // Stars
+  // Stars - ОНОВЛЕНО
   starsRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 4 },
+  starButton: {
+    padding: 4,
+    borderRadius: 16,
+    marginHorizontal: 4,
+  },
+  starButtonActive: {
+    backgroundColor: '#008655',
+  },
 
   // Rows (Language / Publisher)
   rowItem: {
@@ -145,6 +153,105 @@ const styles = StyleSheet.create({
   modalContent: { backgroundColor: '#fff', borderTopLeftRadius: 18, borderTopRightRadius: 18, padding: 24, alignItems: 'center' },
   modalTitle: { fontSize: 18, fontWeight: '700', marginBottom: 16 },
   modalClose: { marginTop: 16 },
+
+// ============== ОНОВЛЕНІ СТИЛІ ДЛЯ РЕЙТИНГУ ==============
+ratingBlocksRow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginTop: 8,
+},
+ratingBlock1: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: 40,
+  height: 40,
+  borderRadius: 20,
+  borderWidth: 1,
+  borderColor: '#E6E6E6',
+  backgroundColor: 'transparent',
+},
+ratingBlock2: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: 50,
+  height: 40,
+  borderRadius: 20,
+  borderWidth: 1,
+  borderColor: '#E6E6E6',
+  backgroundColor: 'transparent',
+  flexDirection: 'row',
+},
+ratingBlock3: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: 60,
+  height: 40,
+  borderRadius: 20,
+  borderWidth: 1,
+  borderColor: '#E6E6E6',
+  backgroundColor: 'transparent',
+  flexDirection: 'row',
+},
+ratingBlock4: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: 80,
+  height: 40,
+  borderRadius: 20,
+  borderWidth: 1,
+  borderColor: '#E6E6E6',
+  backgroundColor: 'transparent',
+  flexDirection: 'row',
+},
+ratingBlock5: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: 95,
+  height: 40,
+  borderRadius: 20,
+  borderWidth: 1,
+  borderColor: '#E6E6E6',
+  backgroundColor: 'transparent',
+  flexDirection: 'row',
+},
+ratingBlockActive: {
+  backgroundColor: '#008655',
+  borderColor: '#008655',
+},
+starIcon: {
+  marginHorizontal: 1,
+},
+
+
+  // ============== ДОДАНІ СТИЛІ ДЛЯ ФОРМАТІВ ==============
+  chipsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 8,
+  },
+  chip: {
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 18,
+    backgroundColor: '#EFEFEF',
+    marginRight: 10,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  chipActive: {
+    backgroundColor: '#008655',
+    borderColor: '#008655',
+  },
+  chipText: {
+    color: '#0F0F0F',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  chipTextActive: {
+    color: '#F1F1F1',
+    fontWeight: '700',
+  },
 });
 
 export default styles;

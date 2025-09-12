@@ -203,15 +203,32 @@ const CategoryScreen = ({ navigation, route }) => {
                 </View>
               </View>
 
-              {/* Рейтинг */}
+              {/* Рейтинг - ОНОВЛЕНО */}
               <View style={styles.block}>
                 <Text style={styles.blockTitle}>Рейтинг</Text>
-                <View style={styles.starsRow}>
-                  {[1,2,3,4,5].map(i => (
-                    <TouchableOpacity key={i} onPress={() => setRating(i)}>
-                      <Ionicons name={i <= rating ? 'star' : 'star-outline'} size={26} color={i <= rating ? '#2E8B57' : '#FFCC66'} style={{ marginHorizontal: 4 }} />
-                    </TouchableOpacity>
-                  ))}
+                <View style={styles.ratingBlocksRow}>
+                  {[1, 2, 3, 4, 5].map((starCount) => {
+                    const isActive = starCount === rating;
+                    const blockStyle = styles[`ratingBlock${starCount}`];
+
+                    return (
+                      <TouchableOpacity
+                        key={starCount}
+                        onPress={() => setRating(isActive ? 0 : starCount)}
+                        style={[blockStyle, isActive && styles.ratingBlockActive]}
+                      >
+                        {Array.from({ length: starCount }).map((_, index) => (
+                          <Ionicons
+                            key={index}
+                            name="star"
+                            size={16}
+                            color={isActive ? '#F1F1F1' : '#FFCC66'}
+                            style={styles.starIcon}
+                          />
+                        ))}
+                      </TouchableOpacity>
+                    );
+                  })}
                 </View>
               </View>
 
