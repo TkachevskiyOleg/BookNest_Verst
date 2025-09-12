@@ -6,7 +6,7 @@ const DrawerContent = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.logoRow}>
-        <Image source={require('../../assets/Logo.png')} style={styles.logo} />
+        <Image source={require('../../assets/Logo1.png')} style={styles.logo} />
         <Text style={styles.logoText}>BookNest</Text>
       </View>
       <View style={styles.menuSection}>
