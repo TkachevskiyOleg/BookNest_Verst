@@ -139,7 +139,7 @@ const HomeScreen = ({ navigation }) => {
           <View style={styles.recommendedCard}>
             <View style={styles.recommendedHeader}>
               <Text style={styles.recommendedLabel}>РЕКОМЕНДОВАНА КНИГА</Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('Category', { title: 'Рекомендоване' })}>
                 <Text style={styles.seeAll}>Більше</Text>
               </TouchableOpacity>
             </View>
@@ -195,7 +195,12 @@ const HomeScreen = ({ navigation }) => {
 
         {/* Блок "Читати далі" */}
         <View style={styles.currentReadingSection}>
-          <Text style={styles.sectionTitle}>Читати далі</Text>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Читати далі</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('ReadNext')}>
+              <Text style={styles.seeAll}>Більше</Text>
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity style={styles.currentReadingCard}>
             <Image 
               source={{ uri: currentReadingBook.cover }} 
@@ -222,7 +227,7 @@ const HomeScreen = ({ navigation }) => {
         {/* Новинки */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Новинки</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Category', { title: 'Новинки' })}>
             <Text style={styles.seeAll}>Більше</Text>
           </TouchableOpacity>
         </View>
@@ -239,7 +244,7 @@ const HomeScreen = ({ navigation }) => {
         {/* Популярне */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Популярне Зараз</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Category', { title: 'Популярне Зараз' })}>
             <Text style={styles.seeAll}>Більше</Text>
           </TouchableOpacity>
         </View>
