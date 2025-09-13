@@ -89,12 +89,12 @@ const HomeScreen = ({ navigation }) => {
 
   // Функція для відображення книги
   const renderBookItem = ({ item }) => (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={styles.bookItem}
       onPress={() => navigation.navigate('BookDetail', { book: item })}
     >
-      <Image 
-        source={{ uri: item.cover }} 
+      <Image
+        source={{ uri: item.cover }}
         style={styles.bookCover}
         defaultSource={require('../../assets/placeholder-cover.png')}
       />
@@ -112,7 +112,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      
+
       {/* Верхня панель з бургер-меню та пошуком */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
@@ -130,7 +130,7 @@ const HomeScreen = ({ navigation }) => {
       </View>
 
       {/* Весь контент */}
-      <ScrollView 
+      <ScrollView
         style={styles.contentScroll}
         showsVerticalScrollIndicator={true}
       >
@@ -155,8 +155,8 @@ const HomeScreen = ({ navigation }) => {
                   <Text style={styles.reviews}>(20 відгуків)</Text>
                 </View>
               </View>
-              <Image 
-                source={{ uri: recommendedBook.cover }} 
+              <Image
+                source={{ uri: recommendedBook.cover }}
                 style={styles.recommendedCover}
                 defaultSource={require('../../assets/placeholder-cover.png')}
               />
@@ -166,8 +166,8 @@ const HomeScreen = ({ navigation }) => {
 
         {/* Категорії */}
         <View style={styles.categoriesWrapper}>
-          <ScrollView 
-            horizontal 
+          <ScrollView
+            horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.categoriesContent}
           >
@@ -193,6 +193,40 @@ const HomeScreen = ({ navigation }) => {
           </ScrollView>
         </View>
 
+        {/* Блок "Читати далі" */}
+        <View style={styles.currentReadingSection}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Читати далі</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('ReadNext')}>
+              <Text style={styles.seeAll}>Більше</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.currentReadingCard}>
+            <Image
+              source={{ uri: currentReadingBook.cover }}
+              style={styles.currentReadingCover}
+              defaultSource={require('../../assets/placeholder-cover.png')}
+            />
+            <View style={styles.currentReadingInfo}>
+              <Text style={styles.currentReadingTitle} numberOfLines={2}>{currentReadingBook.title}</Text>
+              <Text style={styles.currentReadingAuthor}>{currentReadingBook.author}</Text>
+              <View style={styles.progressContainer}>
+                <View style={styles.progressBar}>
+                  <View style={[styles.progressFill, { width: `${currentReadingBook.progress}%` }]} />
+                </View>
+                <Text style={styles.progressText}>{currentReadingBook.progress}%</Text>
+              </View>
+              <Text style={styles.pageInfo}>Сторінка {currentReadingBook.currentPage} з {currentReadingBook.totalPages}</Text>
+              <TouchableOpacity
+                style={styles.continueButton}
+                onPress={() => navigation.navigate('Reading', { book: currentReadingBook })}
+              >
+                <Text style={styles.continueButtonText}>Продовжити читання</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
         {/* Новинки */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Новинки</Text>
@@ -209,37 +243,6 @@ const HomeScreen = ({ navigation }) => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.horizontalBooksContainer}
         />
-
-        {/* Блок "Читати далі" */}
-        <View style={styles.currentReadingSection}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Читати далі</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('ReadNext')}>
-              <Text style={styles.seeAll}>Більше</Text>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity style={styles.currentReadingCard}>
-            <Image 
-              source={{ uri: currentReadingBook.cover }} 
-              style={styles.currentReadingCover}
-              defaultSource={require('../../assets/placeholder-cover.png')}
-            />
-            <View style={styles.currentReadingInfo}>
-              <Text style={styles.currentReadingTitle} numberOfLines={2}>{currentReadingBook.title}</Text>
-              <Text style={styles.currentReadingAuthor}>{currentReadingBook.author}</Text>
-              <View style={styles.progressContainer}>
-                <View style={styles.progressBar}>
-                  <View style={[styles.progressFill, { width: `${currentReadingBook.progress}%` }]} />
-                </View>
-                <Text style={styles.progressText}>{currentReadingBook.progress}%</Text>
-              </View>
-              <Text style={styles.pageInfo}>Сторінка {currentReadingBook.currentPage} з {currentReadingBook.totalPages}</Text>
-              <TouchableOpacity style={styles.continueButton}>
-                <Text style={styles.continueButtonText}>Продовжити читання</Text>
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-        </View>
 
         {/* Популярне */}
         <View style={styles.sectionHeader}>
