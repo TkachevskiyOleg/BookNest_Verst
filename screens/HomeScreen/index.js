@@ -193,6 +193,23 @@ const HomeScreen = ({ navigation }) => {
           </ScrollView>
         </View>
 
+        {/* Новинки */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Новинки</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Category', { title: 'Новинки' })}>
+            <Text style={styles.seeAll}>Більше</Text>
+          </TouchableOpacity>
+        </View>
+
+        <FlatList
+          data={mockBooks.slice(2, 4)}
+          renderItem={renderBookItem}
+          keyExtractor={item => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.horizontalBooksContainer}
+        />
+
         {/* Блок "Читати далі" */}
         <View style={styles.currentReadingSection}>
           <View style={styles.sectionHeader}>
@@ -223,23 +240,6 @@ const HomeScreen = ({ navigation }) => {
             </View>
           </TouchableOpacity>
         </View>
-
-        {/* Новинки */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Новинки</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Category', { title: 'Новинки' })}>
-            <Text style={styles.seeAll}>Більше</Text>
-          </TouchableOpacity>
-        </View>
-
-        <FlatList
-          data={mockBooks.slice(2, 4)}
-          renderItem={renderBookItem}
-          keyExtractor={item => item.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.horizontalBooksContainer}
-        />
 
         {/* Популярне */}
         <View style={styles.sectionHeader}>
