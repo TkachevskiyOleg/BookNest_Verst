@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
 const DrawerContent = ({ navigation }) => {
+  const [activeItem, setActiveItem] = useState('Головна');
+
+  const handleItemPress = (itemName, screenName) => {
+    setActiveItem(itemName);
+    if (screenName) {
+      navigation.navigate(screenName);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.logoRow}>
@@ -12,22 +21,26 @@ const DrawerContent = ({ navigation }) => {
         <DrawerItem 
           icon={require('../../assets/Main.png')} 
           label="Головна" 
-          onPress={() => navigation.navigate('Home')} 
+          isActive={activeItem === 'Головна'}
+          onPress={() => handleItemPress('Головна', 'Home')} 
         />
         <DrawerItem 
           icon={require('../../assets/collections.png')} 
           label="Колекції" 
-          onPress={() => {}} 
+          isActive={activeItem === 'Колекції'}
+          onPress={() => handleItemPress('Колекції')} 
         />
         <DrawerItem 
           icon={require('../../assets/Book.png')} 
           label="Читати далі" 
-          onPress={() => navigation.navigate('ReadNext')} 
+          isActive={activeItem === 'Читати далі'}
+          onPress={() => handleItemPress('Читати далі', 'ReadNext')} 
         />
         <DrawerItem 
           icon={require('../../assets/basket.png')} 
           label="Корзина" 
-          onPress={() => {}} 
+          isActive={activeItem === 'Корзина'}
+          onPress={() => handleItemPress('Корзина')} 
         />
       </View>
       <View style={styles.divider} />
@@ -35,24 +48,36 @@ const DrawerContent = ({ navigation }) => {
         <DrawerItem 
           icon={require('../../assets/settings.png')} 
           label="Налаштування" 
-          onPress={() => {}} 
+          isActive={activeItem === 'Налаштування'}
+          onPress={() => handleItemPress('Налаштування')} 
         />
         <DrawerItem 
           icon={require('../../assets/feedback.png')} 
           label="Відправити відгук" 
-          onPress={() => {}} 
+          isActive={activeItem === 'Відправити відгук'}
+          onPress={() => handleItemPress('Відправити відгук')} 
         />
       </View>
     </View>
   );
 };
 
-const DrawerItem = ({ icon, label, onPress }) => (
-  <TouchableOpacity style={styles.item} onPress={onPress}>
-    <Image source={icon} style={styles.itemIcon} />
-    <Text style={styles.itemText}>{label}</Text>
-  </TouchableOpacity>
-);
+const DrawerItem = ({ icon, label, isActive, onPress }) => {
+  const iconStyle = isActive 
+    ? [styles.itemIcon, styles.itemIconActive]
+    : styles.itemIcon;
+  
+  const textStyle = isActive 
+    ? [styles.itemText, styles.itemTextActive]
+    : styles.itemText;
+
+  return (
+    <TouchableOpacity style={styles.item} onPress={onPress}>
+      <Image source={icon} style={iconStyle} />
+      <Text style={textStyle}>{label}</Text>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -91,10 +116,17 @@ const styles = StyleSheet.create({
     height: 22,
     marginRight: 18,
     resizeMode: 'contain',
+    tintColor: '#222', 
+  },
+  itemIconActive: {
+    tintColor: '#008655', 
   },
   itemText: {
     fontSize: 16,
-    color: '#222',
+    color: '#222', 
+  },
+  itemTextActive: {
+    color: '#008655', 
   },
   divider: {
     height: 1,
