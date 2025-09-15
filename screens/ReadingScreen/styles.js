@@ -107,6 +107,206 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
+  // Стилі для модального вікна налаштувань
+  settingsModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  settingsModalOverlayTouchable: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  settingsModalContent: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    padding: 20,
+    maxHeight: height * 0.85,
+  },
+  settingsModalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  settingsModalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  closeButton: {
+    padding: 4,
+  },
+  settingsScrollView: {
+    flex: 1,
+  },
+  settingItem: {
+    marginBottom: 24,
+  },
+  sectionLabel: {
+    fontSize: 16,
+    color: '#000',
+    marginBottom: 12,
+    fontWeight: '500',
+    marginTop: 8,
+  },
+  settingLabel: {
+    fontSize: 16,
+    color: '#000',
+    marginBottom: 12,
+    fontWeight: '500',
+  },
+  // Теми
+  themeContainer: {
+    flexDirection: 'row',
+    justifyContent: 1,
+    marginBottom: 8,
+  },
+  themeOption: {
+    width: 50,
+    height: 50,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    marginHorizontal: 5,
+  },
+  themeOptionSelected: {
+    borderWidth: 2,
+    borderColor: '#008655',
+  },
+  // Яскравість
+  sliderContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  sunIcon: {
+    width: 24,
+    height: 24,
+    marginRight: 10,
+  },
+  slider: {
+    flex: 1,
+    marginHorizontal: 10,
+  },
+  sliderValue: {
+    fontSize: 16,
+    color: '#000',
+    minWidth: 40,
+    textAlign: 'center',
+  },
+  // Розмір шрифту
+  fontSizeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  fontSizeButton: {
+    padding: 12,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 8,
+    minWidth: 60,
+    alignItems: 'center',
+  },
+  fontSizeButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  fontSizeDisplay: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    marginHorizontal: 10,
+  },
+  fontSizeDisplayText: {
+    color: '#000',
+    marginBottom: 4,
+    fontWeight: 'bold',
+  },
+  fontSizeLabel: {
+    fontSize: 12,
+    color: '#666',
+    marginBottom: 4,
+  },
+  fontSizeValue: {
+    fontSize: 14,
+    color: '#666',
+  },
+  // Шрифти та випадаючі списки
+  dropdownPicker: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderRadius: 8,
+  },
+  dropdownPickerText: {
+    fontSize: 16,
+    color: '#000',
+  },
+  dropdownOptions: {
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderRadius: 8,
+    marginTop: 5,
+    backgroundColor: '#fff',
+  },
+  dropdownOption: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  dropdownOptionText: {
+    fontSize: 16,
+    color: '#000',
+  },
+  // Режим читання
+  readingModeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  readingModeOption: {
+    flex: 1,
+    padding: 15,
+    marginHorizontal: 5,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  readingModeOptionSelected: {
+    backgroundColor: '#008655',
+    borderColor: '#008655',
+  },
+  readingModeIcon: {
+    width: 24,
+    height: 24,
+    marginBottom: 8,
+    tintColor: '#000',
+  },
+  readingModeIconSelected: {
+    tintColor: '#fff',
+  },
+  readingModeText: {
+    fontSize: 14,
+    color: '#000',
+    textAlign: 'center',
+  },
+  readingModeTextSelected: {
+    color: '#fff',
+  },
 });
 
 export default styles;
