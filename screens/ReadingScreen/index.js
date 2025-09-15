@@ -11,7 +11,6 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import styles from './styles';
 
-// Імпортуємо іконки (замініть шляхи на реальні)
 const leftArrow = require('../../assets/left_arrow.png');
 const rightArrow = require('../../assets/right_arrow.png');
 const informationCircle = require('../../assets/information-circle.png');
