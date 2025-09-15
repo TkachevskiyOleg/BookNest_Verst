@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 const DrawerContent = ({ navigation }) => {
   return (
@@ -10,15 +9,39 @@ const DrawerContent = ({ navigation }) => {
         <Text style={styles.logoText}>BookNest</Text>
       </View>
       <View style={styles.menuSection}>
-        <DrawerItem icon="home-outline" label="Головна" onPress={() => navigation.navigate('Home')} />
-        <DrawerItem icon="library-outline" label="Колекції" onPress={() => {}} />
-        <DrawerItem icon="book-outline" label="Читати далі" onPress={() => navigation.navigate('ReadNext')} />
-        <DrawerItem icon="cart-outline" label="Корзина" onPress={() => {}} />
+        <DrawerItem 
+          icon={require('../../assets/Main.png')} 
+          label="Головна" 
+          onPress={() => navigation.navigate('Home')} 
+        />
+        <DrawerItem 
+          icon={require('../../assets/collections.png')} 
+          label="Колекції" 
+          onPress={() => {}} 
+        />
+        <DrawerItem 
+          icon={require('../../assets/Book.png')} 
+          label="Читати далі" 
+          onPress={() => navigation.navigate('ReadNext')} 
+        />
+        <DrawerItem 
+          icon={require('../../assets/basket.png')} 
+          label="Корзина" 
+          onPress={() => {}} 
+        />
       </View>
       <View style={styles.divider} />
       <View style={styles.menuSection}>
-        <DrawerItem icon="settings-outline" label="Налаштування" onPress={() => {}} />
-        <DrawerItem icon="chatbox-ellipses-outline" label="Відправити відгук" onPress={() => {}} />
+        <DrawerItem 
+          icon={require('../../assets/settings.png')} 
+          label="Налаштування" 
+          onPress={() => {}} 
+        />
+        <DrawerItem 
+          icon={require('../../assets/feedback.png')} 
+          label="Відправити відгук" 
+          onPress={() => {}} 
+        />
       </View>
     </View>
   );
@@ -26,7 +49,7 @@ const DrawerContent = ({ navigation }) => {
 
 const DrawerItem = ({ icon, label, onPress }) => (
   <TouchableOpacity style={styles.item} onPress={onPress}>
-    <Ionicons name={icon} size={22} color="#222" style={styles.itemIcon} />
+    <Image source={icon} style={styles.itemIcon} />
     <Text style={styles.itemText}>{label}</Text>
   </TouchableOpacity>
 );
@@ -64,7 +87,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   itemIcon: {
+    width: 22,
+    height: 22,
     marginRight: 18,
+    resizeMode: 'contain',
   },
   itemText: {
     fontSize: 16,
