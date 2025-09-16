@@ -10,8 +10,7 @@ import {
   Modal,
   Switch,
   StyleSheet,
-  Dimensions,
-  Pressable
+  Dimensions
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
@@ -94,7 +93,7 @@ const ReadingScreen = ({ route, navigation }) => {
   const [isColorPickerVisible, setIsColorPickerVisible] = useState(false);
   const [highlightOpacity, setHighlightOpacity] = useState(1);
   const [selectionPosition, setSelectionPosition] = useState({ x: 20, y: 180 });
-  const [isSelecting, setIsSelecting] = useState(false);
+  const [awaitingSelection, setAwaitingSelection] = useState(false);
 
   const handleScroll = (event) => {
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
@@ -206,30 +205,26 @@ const ReadingScreen = ({ route, navigation }) => {
         showsVerticalScrollIndicator={false}
         onScroll={handleScroll}
         scrollEventThrottle={16}
+        onTouchStart={(e) => {
+          // фіксуємо потенційну позицію початку виділення
+          const { pageX, pageY } = e.nativeEvent;
+          const posX = Math.max(8, pageX - 120);
+          const posY = Math.max(80, pageY - 70);
+          setSelectionPosition({ x: posX, y: posY });
+          setAwaitingSelection(true);
+        }}
+        onTouchEnd={() => {
+          // після завершення жесту, якщо було довге утримання/виділення, показуємо панель
+          if (awaitingSelection) {
+            setIsSelectionVisible(true);
+            setAwaitingSelection(false);
+          }
+        }}
       >
         <View style={styles.contentWrapper}>
-          <Pressable
-            delayLongPress={250}
-            onPressIn={(e) => {
-              const { pageX, pageY } = e.nativeEvent;
-              const posX = Math.max(8, pageX - 120);
-              const posY = Math.max(80, pageY - 70);
-              setSelectionPosition({ x: posX, y: posY });
-            }}
-            onLongPress={() => {
-              setIsSelecting(true);
-            }}
-            onPressOut={() => {
-              if (isSelecting) {
-                setIsSelectionVisible(true);
-                setIsSelecting(false);
-              }
-            }}
-          >
-            <Text style={styles.text}>
-              {bookContent}
-            </Text>
-          </Pressable>
+          <Text style={styles.text} selectable>
+            {bookContent}
+          </Text>
         </View>
         
         {/* Номер сторінки в кінці контенту */}
