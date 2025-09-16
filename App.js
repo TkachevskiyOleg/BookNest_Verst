@@ -11,6 +11,7 @@ import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import ResetPasswordScreen from './screens/ResetPasswordScreen';
 import VerificationScreen from './screens/VerificationScreen';
 import HomeScreen from './screens/HomeScreen';
+import LibraryScreen from './screens/LibraryScreen';
 import ReadNextScreen from './screens/Read_next';
 import ReadingScreen from './screens/ReadingScreen'; 
 import CustomDrawerContent from './screens/HomeScreen/DrawerContent';
@@ -26,6 +27,7 @@ function MainStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Home">
       <Stack.Screen name="Home" component={HomeScreen}/>
+      <Stack.Screen name="Library" component={LibraryScreen}/>
       <Stack.Screen name="ReadNext" component={ReadNextScreen}/>
       <Stack.Screen name="Reading" component={ReadingScreen}/> 
       <Stack.Screen name="Category" component={CategoryScreen}/>

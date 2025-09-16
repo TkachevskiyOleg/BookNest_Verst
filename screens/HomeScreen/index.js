@@ -264,11 +264,11 @@ const HomeScreen = ({ navigation }) => {
 
       {/* Нижня панель навігації */}
       <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Home')}>
           <Ionicons name="home" size={24} color="#2E8B57" />
           <Text style={styles.navTextActive}>Головна</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Library')}>
           <Ionicons name="library-outline" size={24} color="#666" />
           <Text style={styles.navText}>Бібліотека</Text>
         </TouchableOpacity>

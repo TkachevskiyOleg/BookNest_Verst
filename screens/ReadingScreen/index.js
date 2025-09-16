@@ -47,6 +47,9 @@ const ReadingScreen = ({ route, navigation }) => {
   const [isImmersive, setIsImmersive] = useState(false);
   const [progress, setProgress] = useState(24);
   const scrollViewRef = useRef();
+  const lastTouchPositionRef = useRef({ x: 20, y: 180 });
+  const startTouchPositionRef = useRef({ x: 0, y: 0 });
+  const isSelectingRef = useRef(false);
 
   // Стани для налаштувань
   const [isDarkTheme, setIsDarkTheme] = useState(false);
@@ -93,7 +96,7 @@ const ReadingScreen = ({ route, navigation }) => {
   const [isColorPickerVisible, setIsColorPickerVisible] = useState(false);
   const [highlightOpacity, setHighlightOpacity] = useState(1);
   const [selectionPosition, setSelectionPosition] = useState({ x: 20, y: 180 });
-  const [awaitingSelection, setAwaitingSelection] = useState(false);
+  // використовуємо refs щоб визначати реальне виділення
 
   const handleScroll = (event) => {
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
@@ -106,6 +109,8 @@ const ReadingScreen = ({ route, navigation }) => {
     }
     if (isSelectionVisible) setIsSelectionVisible(false);
   };
+
+  // Немає таймерів: показуємо панель тільки після реального перетягування (виділення)
 
   const goPrevPage = () => {
     if (!scrollViewRef.current) return;
@@ -206,19 +211,38 @@ const ReadingScreen = ({ route, navigation }) => {
         onScroll={handleScroll}
         scrollEventThrottle={16}
         onTouchStart={(e) => {
-          // фіксуємо потенційну позицію початку виділення
           const { pageX, pageY } = e.nativeEvent;
           const posX = Math.max(8, pageX - 120);
           const posY = Math.max(80, pageY - 70);
-          setSelectionPosition({ x: posX, y: posY });
-          setAwaitingSelection(true);
+          startTouchPositionRef.current = { x: posX, y: posY };
+          lastTouchPositionRef.current = { x: posX, y: posY };
+          isSelectingRef.current = false;
+          if (isSelectionVisible) setIsSelectionVisible(false);
+        }}
+        onTouchMove={(e) => {
+          // Оновлюємо позицію кінця виділення під час руху
+          const { pageX, pageY } = e.nativeEvent;
+          const posX = Math.max(8, pageX - 120);
+          const posY = Math.max(80, pageY - 70);
+          lastTouchPositionRef.current = { x: posX, y: posY };
+          setSelectionPosition(lastTouchPositionRef.current);
+          // Порог для визначення виділення
+          const dx = posX - startTouchPositionRef.current.x;
+          const dy = posY - startTouchPositionRef.current.y;
+          const distanceSquared = dx * dx + dy * dy;
+          if (distanceSquared > 64) { // ~8px поріг
+            isSelectingRef.current = true;
+          }
         }}
         onTouchEnd={() => {
-          // після завершення жесту, якщо було довге утримання/виділення, показуємо панель
-          if (awaitingSelection) {
+          // Показуємо панель тільки якщо було фактичне виділення (рух з порогом)
+          if (isSelectingRef.current) {
+            setSelectionPosition(lastTouchPositionRef.current);
             setIsSelectionVisible(true);
-            setAwaitingSelection(false);
+          } else {
+            if (isSelectionVisible) setIsSelectionVisible(false);
           }
+          isSelectingRef.current = false;
         }}
       >
         <View style={styles.contentWrapper}>
