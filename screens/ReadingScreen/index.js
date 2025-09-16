@@ -49,8 +49,6 @@ const ReadingScreen = ({ route, navigation }) => {
   const [selectedTheme, setSelectedTheme] = useState('#FFFFFF');
   const [selectedFont, setSelectedFont] = useState('SF Pro');
   const [showFontDropdown, setShowFontDropdown] = useState(false);
-  const [showSpacingDropdown, setShowSpacingDropdown] = useState(false);
-  const [showLineSpacingDropdown, setShowLineSpacingDropdown] = useState(false);
 
   const bookContent = book?.content || `Вітер дув із півночі, приносячи запахи хвої, дощу й чогось неспокійного.
 Марта стояла на краю скелі, і світ навколо ніби завис. У руці — старий, злегка пожестілий лист.
