@@ -10,10 +10,17 @@ import {
   Modal,
   Switch,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  Pressable
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
+import BottomToolbar from './BottomToolbar';
+import SettingsModal from './SettingsModal';
+import AutoScrollModal from './AutoScrollModal';
+import ChaptersDrawer from './ChaptersDrawer';
+import TextSelectionToolbar from './TextSelectionToolbar';
+import ColorPickerModal from './ColorPickerModal';
 import styles from './styles';
 
 const { height } = Dimensions.get('window');
@@ -36,6 +43,9 @@ const ReadingScreen = ({ route, navigation }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isToolbarVisible, setIsToolbarVisible] = useState(false);
   const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
+  const [isAutoScrollVisible, setIsAutoScrollVisible] = useState(false);
+  const [isChaptersVisible, setIsChaptersVisible] = useState(false);
+  const [isImmersive, setIsImmersive] = useState(false);
   const [progress, setProgress] = useState(24);
   const scrollViewRef = useRef();
 
@@ -43,17 +53,20 @@ const ReadingScreen = ({ route, navigation }) => {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [brightness, setBrightness] = useState(50);
   const [fontSize, setFontSize] = useState(16);
+  const [isDraggingBrightness, setIsDraggingBrightness] = useState(false);
   const [readingMode, setReadingMode] = useState('Одна сторінка');
   const [spacing, setSpacing] = useState('Середні');
   const [lineSpacing, setLineSpacing] = useState('Звичайний');
   const [selectedTheme, setSelectedTheme] = useState('#FFFFFF');
   const [selectedFont, setSelectedFont] = useState('SF Pro');
   const [showFontDropdown, setShowFontDropdown] = useState(false);
+  const [showSpacingDropdown, setShowSpacingDropdown] = useState(false);
+  const [showLineSpacingDropdown, setShowLineSpacingDropdown] = useState(false);
 
   const bookContent = book?.content || `Вітер дув із півночі, приносячи запахи хвої, дощу й чогось неспокійного.
 Марта стояла на краю скелі, і світ навколо ніби завис. У руці — старий, злегка пожестілий лист.
 
-Вона знайшла його в книзі, яку давно не відкривала. «Ти читаєш це — значить, я зник. Але не вважай це втечею. Це — пошук. Можливо, тебе він теж чекає…»
+Вона знайшла його в книзі, яку давно не відкривала. «Ти читаєш це — значить, я зник. Але не вважай це втечею. Це — пошук. Можливо, тебе вн теж чекає…»
 
 Вона перечитала ці рядки тричі. Серце стискалося, та не від болю — від передчуття. Позаду — будинок, стіни, які знали її тишу.
 
@@ -73,6 +86,16 @@ const ReadingScreen = ({ route, navigation }) => {
   const totalPages = book?.totalPages || 784;
   const chapter = book?.chapter || 3;
 
+  const [autoScrollSpeed, setAutoScrollSpeed] = useState(50);
+  const [autoDetectSpeed, setAutoDetectSpeed] = useState(false);
+  const [expandedChapterIds, setExpandedChapterIds] = useState([]);
+  const [drawerTab, setDrawerTab] = useState('chapters');
+  const [isSelectionVisible, setIsSelectionVisible] = useState(false);
+  const [isColorPickerVisible, setIsColorPickerVisible] = useState(false);
+  const [highlightOpacity, setHighlightOpacity] = useState(1);
+  const [selectionPosition, setSelectionPosition] = useState({ x: 20, y: 180 });
+  const [isSelecting, setIsSelecting] = useState(false);
+
   const handleScroll = (event) => {
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
     const paddingToBottom = 50;
@@ -82,6 +105,25 @@ const ReadingScreen = ({ route, navigation }) => {
     } else {
       setIsToolbarVisible(false);
     }
+    if (isSelectionVisible) setIsSelectionVisible(false);
+  };
+
+  const goPrevPage = () => {
+    if (!scrollViewRef.current) return;
+    scrollViewRef.current.scrollTo({ y: 0, animated: true });
+  };
+
+  const goNextPage = () => {
+    if (!scrollViewRef.current) return;
+    scrollViewRef.current.scrollToEnd({ animated: true });
+  };
+
+  const openBookDetails = () => {
+    navigation.navigate('ReadNext');
+  };
+
+  const toggleImmersive = () => {
+    setIsImmersive(!isImmersive);
   };
 
   const increaseFontSize = () => {
@@ -92,36 +134,70 @@ const ReadingScreen = ({ route, navigation }) => {
     if (fontSize > 12) setFontSize(fontSize - 1);
   };
 
-  const fonts = ['SF Pro', 'Georgia', 'Times New Roman', 'Arial', 'Helvetica'];
+  // Плавна зміна яскравості без стрибків
+  const handleBrightnessChange = (value) => {
+    setBrightness(value);
+  };
+  const handleBrightnessSlideStart = () => {
+    setIsDraggingBrightness(true);
+  };
+  const handleBrightnessSlideEnd = (value) => {
+    setIsDraggingBrightness(false);
+    setBrightness(value);
+  };
+
+  // Функції для закриття всіх випадаючих списків
+  const closeAllDropdowns = () => {
+    setShowFontDropdown(false);
+    setShowSpacingDropdown(false);
+    setShowLineSpacingDropdown(false);
+  };
+
+  const fonts = ['SF Pro', 'SF Pro Georgia', 'Times New Roman', 'Helvetica', 'Arial'];
   const spacingOptions = ['Вузькі', 'Середні', 'Широкі'];
-  const lineSpacingOptions = ['Компактний', 'Звичайний', 'Подвійний'];
+  const lineSpacingOptions = ['Щільний', 'Звичайний', 'Великий', 'Розсипний'];
+
+  const chaptersMock = [
+    { id: 'c1', title: '1 Назва розділу' },
+    { id: 'c2', title: '2 Назва розділу' },
+    { id: 'c6', title: '6 Назва розділу', children: [
+      { id: 'c6-1', title: 'Назва під розділу' },
+      { id: 'c6-2', title: 'Назва під розділу' },
+      { id: 'c6-3', title: 'Назва під розділу' },
+    ]},
+    { id: 'c7', title: '7 Назва розділу' },
+  ];
+  const readChapterIds = ['c1','c2'];
+  const bookmarksMock = [];
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" hidden={isImmersive} />
       
       {/* Верхня панель */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.iconButton}
-          onPress={() => setIsSettingsModalVisible(true)}
-        >
-          <Ionicons name="settings-outline" size={24} color="#000" />
-        </TouchableOpacity>
-        
-        <Text style={styles.headerChapter}>Розділ {chapter}</Text>
-        
-        <TouchableOpacity 
-          style={styles.iconButton}
-          onPress={() => setIsBookmarked(!isBookmarked)}
-        >
-          <Ionicons 
-            name={isBookmarked ? "bookmark" : "bookmark-outline"} 
-            size={24} 
-            color={isBookmarked ? "#008655" : "#000"} 
-          />
-        </TouchableOpacity>
-      </View>
+      {!isImmersive && (
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.iconButton}
+            onPress={() => setIsSettingsModalVisible(true)}
+          >
+            <Ionicons name="settings-outline" size={24} color="#000" />
+          </TouchableOpacity>
+          
+          <Text style={styles.headerChapter}>Розділ {chapter}</Text>
+          
+          <TouchableOpacity 
+            style={styles.iconButton}
+            onPress={() => setIsBookmarked(!isBookmarked)}
+          >
+            <Ionicons 
+              name={isBookmarked ? "bookmark" : "bookmark-outline"} 
+              size={24} 
+              color={isBookmarked ? "#008655" : "#000"} 
+            />
+          </TouchableOpacity>
+        </View>
+      )}
 
       {/* Основний контент */}
       <ScrollView 
@@ -132,9 +208,28 @@ const ReadingScreen = ({ route, navigation }) => {
         scrollEventThrottle={16}
       >
         <View style={styles.contentWrapper}>
-          <Text style={styles.text}>
-            {bookContent}
-          </Text>
+          <Pressable
+            delayLongPress={250}
+            onPressIn={(e) => {
+              const { pageX, pageY } = e.nativeEvent;
+              const posX = Math.max(8, pageX - 120);
+              const posY = Math.max(80, pageY - 70);
+              setSelectionPosition({ x: posX, y: posY });
+            }}
+            onLongPress={() => {
+              setIsSelecting(true);
+            }}
+            onPressOut={() => {
+              if (isSelecting) {
+                setIsSelectionVisible(true);
+                setIsSelecting(false);
+              }
+            }}
+          >
+            <Text style={styles.text}>
+              {bookContent}
+            </Text>
+          </Pressable>
         </View>
         
         {/* Номер сторінки в кінці контенту */}
@@ -143,255 +238,108 @@ const ReadingScreen = ({ route, navigation }) => {
         </View>
       </ScrollView>
 
-      {/* Панель інструментів (з'являється при досягненні кінця) */}
       {isToolbarVisible && (
-        <View style={styles.toolbarPanel}>
-          {/* Прогрес читання */}
-          <View style={styles.progressContainer}>
-            <Text style={styles.progressText}>{progress}%</Text>
-            <View style={styles.progressBar}>
-              <View style={[styles.progressFill, {width: `${progress}%`}]} />
-            </View>
-          </View>
-
-          {/* Іконки інструментів */}
-          <View style={styles.toolsContainer}>
-            <TouchableOpacity style={styles.toolButton}>
-              <Image source={leftArrow} style={styles.toolIcon} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.toolButton}>
-              <Image source={rightArrow} style={styles.toolIcon} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.toolButton}>
-              <Image source={informationCircle} style={styles.toolIcon} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.toolButton}>
-              <Image source={scrollVertical} style={styles.toolIcon} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.toolButton}>
-              <Image source={autoScroll} style={styles.toolIcon} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.toolButton}>
-              <Image source={sections} style={styles.toolIcon} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.toolButton}>
-              <Image source={search} style={styles.toolIcon} />
-            </TouchableOpacity>
-          </View>
-        </View>
+        <BottomToolbar
+          progress={progress}
+          onLeftPress={goPrevPage}
+          onRightPress={goNextPage}
+          onInfoPress={openBookDetails}
+          onToggleImmersive={toggleImmersive}
+          onAutoScrollPress={() => setIsAutoScrollVisible(true)}
+          onChaptersPress={() => setIsChaptersVisible(true)}
+          onSearchPress={() => {}}
+        />
       )}
 
+      {isSelectionVisible && (
+        <TextSelectionToolbar
+          style={{ position: 'absolute', top: selectionPosition.y, left: selectionPosition.x }}
+          onTranslate={() => {}}
+          onUnderline={() => {}}
+          onCopy={() => {}}
+          onComment={() => {}}
+          onColorPicker={() => { setIsSelectionVisible(false); setIsColorPickerVisible(true); }}
+        />
+      )}
+
+      <ColorPickerModal
+        visible={isColorPickerVisible}
+        onClose={() => setIsColorPickerVisible(false)}
+        opacity={highlightOpacity}
+        onChangeOpacity={setHighlightOpacity}
+        onPickColor={(c) => { /* TODO: apply highlight */ }}
+      />
+
+      <AutoScrollModal
+        visible={isAutoScrollVisible}
+        speed={autoScrollSpeed}
+        onChangeSpeed={setAutoScrollSpeed}
+        autoDetect={autoDetectSpeed}
+        onToggleAutoDetect={() => setAutoDetectSpeed(!autoDetectSpeed)}
+        onClose={() => setIsAutoScrollVisible(false)}
+      />
+
+      <ChaptersDrawer
+        visible={isChaptersVisible}
+        onClose={() => setIsChaptersVisible(false)}
+        chapters={chaptersMock}
+        currentId={'c6'}
+        readIds={readChapterIds}
+        expandedIds={expandedChapterIds}
+        onToggleExpand={(id) => {
+          setExpandedChapterIds((prev) => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+        }}
+        onSelectChapter={(item) => {
+          // TODO: scroll to chapter
+          setIsChaptersVisible(false);
+        }}
+        currentIndex={6}
+        totalCount={22}
+        activeTab={drawerTab}
+        onChangeTab={setDrawerTab}
+        bookmarks={bookmarksMock}
+      />
+
       {/* Модальне вікно налаштувань */}
-      <Modal
+      <SettingsModal
         visible={isSettingsModalVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setIsSettingsModalVisible(false)}
-      >
-        <View style={styles.settingsModalOverlay}>
-          <TouchableOpacity 
-            style={styles.settingsModalOverlayTouchable}
-            activeOpacity={1}
-            onPress={() => setIsSettingsModalVisible(false)}
-          />
-          <View style={styles.settingsModalContent}>
-            {/* Заголовок модального вікна */}
-            <View style={styles.settingsModalHeader}>
-              <Text style={styles.settingsModalTitle}>Налаштування</Text>
-              <TouchableOpacity 
-                onPress={() => setIsSettingsModalVisible(false)}
-                style={styles.closeButton}
-              >
-                <Ionicons name="close" size={24} color="#000" />
-              </TouchableOpacity>
-            </View>
-
-            {/* Налаштування */}
-            <ScrollView style={styles.settingsScrollView}>
-              {/* Тема */}
-              <View style={styles.settingItem}>
-                <Text style={styles.settingLabel}>Тема</Text>
-                <View style={styles.themeContainer}>
-                  <TouchableOpacity 
-                    style={[styles.themeOption, { backgroundColor: '#FFFFFF' }, selectedTheme === '#FFFFFF' && styles.themeOptionSelected]}
-                    onPress={() => setSelectedTheme('#FFFFFF')}
-                  />
-                  <TouchableOpacity 
-                    style={[styles.themeOption, { backgroundColor: '#F7F3E9' }, selectedTheme === '#F7F3E9' && styles.themeOptionSelected]}
-                    onPress={() => setSelectedTheme('#F7F3E9')}
-                  />
-                  <TouchableOpacity 
-                    style={[styles.themeOption, { backgroundColor: '#2A2D3A' }, selectedTheme === '#2A2D3A' && styles.themeOptionSelected]}
-                    onPress={() => setSelectedTheme('#2A2D3A')}
-                  />
-                </View>
-              </View>
-
-              {/* Яскравість */}
-              <View style={styles.settingItem}>
-                <Text style={styles.settingLabel}>Яскравість</Text>
-                <View style={styles.sliderContainer}>
-                  <Image source={sunIcon} style={styles.sunIcon} />
-                  <Slider
-                    style={styles.slider}
-                    minimumValue={0}
-                    maximumValue={100}
-                    step={1}
-                    value={brightness}
-                    onValueChange={setBrightness}
-                    minimumTrackTintColor="#008655"
-                    maximumTrackTintColor="#e0e0e0"
-                    thumbTintColor="#008655"
-                  />
-                  <Text style={styles.sliderValue}>{brightness}%</Text>
-                </View>
-              </View>
-
-              {/* Розмір шрифту */}
-              <View style={styles.settingItem}>
-                <Text style={styles.settingLabel}>Розмір шрифту</Text>
-                <View style={styles.fontSizeContainer}>
-                  <TouchableOpacity onPress={decreaseFontSize} style={styles.fontSizeButton}>
-                    <Text style={styles.fontSizeButtonText}>Aа-</Text>
-                  </TouchableOpacity>
-                  <View style={styles.fontSizeDisplay}>
-                    <Text style={[styles.fontSizeDisplayText, {fontSize}]}>Aа</Text>
-                    <Text style={styles.fontSizeLabel}>Розмір шрифта</Text>
-                    <Text style={styles.fontSizeValue}>{fontSize} px</Text>
-                  </View>
-                  <TouchableOpacity onPress={increaseFontSize} style={styles.fontSizeButton}>
-                    <Text style={styles.fontSizeButtonText}>Aа+</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              {/* Шрифти */}
-              <View style={styles.settingItem}>
-                <Text style={styles.settingLabel}>Шрифти</Text>
-                <TouchableOpacity 
-                  style={styles.dropdownPicker}
-                  onPress={() => setShowFontDropdown(!showFontDropdown)}
-                >
-                  <Text style={styles.dropdownPickerText}>{selectedFont}</Text>
-                  <Ionicons name={showFontDropdown ? "chevron-up" : "chevron-down"} size={20} color="#666" />
-                </TouchableOpacity>
-                {showFontDropdown && (
-                  <View style={styles.dropdownOptions}>
-                    {fonts.map((font) => (
-                      <TouchableOpacity
-                        key={font}
-                        style={styles.dropdownOption}
-                        onPress={() => {
-                          setSelectedFont(font);
-                          setShowFontDropdown(false);
-                        }}
-                      >
-                        <Text style={styles.dropdownOptionText}>{font}</Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                )}
-              </View>
-
-              {/* Режим читання */}
-              <View style={styles.settingItem}>
-                <Text style={styles.settingLabel}>Режим читання</Text>
-                <View style={styles.readingModeContainer}>
-                  <TouchableOpacity
-                    style={[styles.readingModeOption, readingMode === 'Одна сторінка' && styles.readingModeOptionSelected]}
-                    onPress={() => setReadingMode('Одна сторінка')}
-                  >
-                    <Image 
-                      source={singlePageIcon} 
-                      style={[
-                        styles.readingModeIcon, 
-                        readingMode === 'Одна сторінка' && styles.readingModeIconSelected
-                      ]} 
-                    />
-                    <Text style={[styles.readingModeText, readingMode === 'Одна сторінка' && styles.readingModeTextSelected]}>
-                      Одна сторінка
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.readingModeOption, readingMode === 'Режим прокручування' && styles.readingModeOptionSelected]}
-                    onPress={() => setReadingMode('Режим прокручування')}
-                  >
-                    <Image 
-                      source={scrollModeIcon} 
-                      style={[
-                        styles.readingModeIcon, 
-                        readingMode === 'Режим прокручування' && styles.readingModeIconSelected
-                      ]} 
-                    />
-                    <Text style={[styles.readingModeText, readingMode === 'Режим прокручування' && styles.readingModeTextSelected]}>
-                      Режим прокручування
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              {/* Інтервал */}
-              <Text style={styles.sectionLabel}>Інтервал</Text>
-
-              {/* Поля */}
-              <View style={styles.settingItem}>
-                <Text style={styles.settingLabel}>Поля</Text>
-                <TouchableOpacity 
-                  style={styles.dropdownPicker}
-                  onPress={() => setShowSpacingDropdown(!showSpacingDropdown)}
-                >
-                  <Text style={styles.dropdownPickerText}>{spacing}</Text>
-                  <Ionicons name={showSpacingDropdown ? "chevron-up" : "chevron-down"} size={20} color="#666" />
-                </TouchableOpacity>
-                {showSpacingDropdown && (
-                  <View style={styles.dropdownOptions}>
-                    {spacingOptions.map((option) => (
-                      <TouchableOpacity
-                        key={option}
-                        style={styles.dropdownOption}
-                        onPress={() => {
-                          setSpacing(option);
-                          setShowSpacingDropdown(false);
-                        }}
-                      >
-                        <Text style={styles.dropdownOptionText}>{option}</Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                )}
-              </View>
-
-              {/* Міжрядковий інтервал */}
-              <View style={styles.settingItem}>
-                <Text style={styles.settingLabel}>Міжрядковий інтервал</Text>
-                <TouchableOpacity 
-                  style={styles.dropdownPicker}
-                  onPress={() => setShowLineSpacingDropdown(!showLineSpacingDropdown)}
-                >
-                  <Text style={styles.dropdownPickerText}>{lineSpacing}</Text>
-                  <Ionicons name={showLineSpacingDropdown ? "chevron-up" : "chevron-down"} size={20} color="#666" />
-                </TouchableOpacity>
-                {showLineSpacingDropdown && (
-                  <View style={styles.dropdownOptions}>
-                    {lineSpacingOptions.map((option) => (
-                      <TouchableOpacity
-                        key={option}
-                        style={styles.dropdownOption}
-                        onPress={() => {
-                          setLineSpacing(option);
-                          setShowLineSpacingDropdown(false);
-                        }}
-                      >
-                        <Text style={styles.dropdownOptionText}>{option}</Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                )}
-              </View>
-            </ScrollView>
-          </View>
-        </View>
-      </Modal>
+        onClose={() => {
+          closeAllDropdowns();
+          setIsSettingsModalVisible(false);
+        }}
+        state={{
+          isDarkTheme,
+          brightness,
+          fontSize,
+          readingMode,
+          spacing,
+          lineSpacing,
+          selectedTheme,
+          selectedFont,
+          showFontDropdown,
+          showSpacingDropdown,
+          showLineSpacingDropdown,
+          fonts,
+          spacingOptions,
+          lineSpacingOptions,
+        }}
+        setters={{
+          setIsDarkTheme,
+          setFontSize,
+          setReadingMode,
+          setSpacing,
+          setLineSpacing,
+          setSelectedTheme,
+          setSelectedFont,
+          setShowFontDropdown,
+          setShowSpacingDropdown,
+          setShowLineSpacingDropdown,
+        }}
+        isDraggingBrightness={isDraggingBrightness}
+        onBrightnessStart={handleBrightnessSlideStart}
+        onBrightnessChange={handleBrightnessChange}
+        onBrightnessEnd={handleBrightnessSlideEnd}
+      />
     </SafeAreaView>
   );
 };
