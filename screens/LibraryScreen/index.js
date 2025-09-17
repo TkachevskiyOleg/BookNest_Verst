@@ -51,6 +51,7 @@ const LibraryScreen = ({ navigation }) => {
   const [modalPos, setModalPos] = useState({ top: 0, left: 0 });
   const cardRefs = useRef(new Map());
   const SCREEN_WIDTH = Dimensions.get('window').width;
+  const SCREEN_HEIGHT = Dimensions.get('window').height;
 
   useEffect(() => {
     if (isActionsVisible) {
@@ -90,8 +91,28 @@ const LibraryScreen = ({ navigation }) => {
           if (ref && ref.measureInWindow) {
             ref.measureInWindow((x, y, w, h) => {
               const containerWidth = Math.min(SCREEN_WIDTH * 0.86, 320);
-              const left = Math.max(12, Math.min(x + w / 2 - containerWidth / 2, SCREEN_WIDTH - containerWidth - 12));
-              setModalPos({ top: y + h + 10, left });
+              const actionsContainerHeight = 330;
+              
+              let left = Math.max(12, Math.min(x + w / 2 - containerWidth / 2, SCREEN_WIDTH - containerWidth - 12));
+              
+              let top;
+              const spaceBelow = SCREEN_HEIGHT - (y + h);
+              const spaceAbove = y;
+
+              if (spaceBelow >= actionsContainerHeight + 10) {
+                top = y + h + 10;
+              } else if (spaceAbove >= actionsContainerHeight + 10) {
+                top = y - actionsContainerHeight - 10;
+              } else {
+                if (spaceBelow > spaceAbove) {
+                  top = y + h + 10;
+                } else {
+                  top = y - actionsContainerHeight - 10;
+                }
+                top = Math.max(10, Math.min(top, SCREEN_HEIGHT - actionsContainerHeight - 10));
+              }
+
+              setModalPos({ top, left });
               setSelectedItem(item);
               scaledItemIdRef.current = item.id;
               setScaledItemId(item.id);
@@ -168,7 +189,6 @@ const LibraryScreen = ({ navigation }) => {
         ))}
       </ScrollView>
 
-      {/* Динамічний заголовок списку згідно вибраного фільтра */}
       <View style={styles.listHeaderRow}>
         <Text style={styles.listHeaderTitle}>
           {activeFilter === 'Усі книги' ? 'Усі' : activeFilter}
@@ -187,7 +207,6 @@ const LibraryScreen = ({ navigation }) => {
 
       <View style={styles.bottomSpacer} />
 
-      {/* Actions modal on long press */}
       <Modal visible={isActionsVisible} transparent animationType="fade" onRequestClose={() => setIsActionsVisible(false)}>
         <View style={styles.actionsOverlay}>
           <BlurView style={styles.blurFill} intensity={40} tint="dark" />
@@ -223,7 +242,6 @@ const LibraryScreen = ({ navigation }) => {
                   })}
                   </View>
                 </Animated.View>
-              {/* Scale only the real card underlaying; nothing to render here */}
             </View>
           )}
         </View>

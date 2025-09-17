@@ -1,7 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');
-const cardWidth = (width - 16 * 2 - 12) / 2; 
+const cardWidth = (width - 16 * 2 - 12) / 2;
 
 const styles = StyleSheet.create({
   container: {
@@ -245,38 +245,50 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#2E8B57',
   },
-  // Actions modal
+  
   actionsOverlay: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
-  blurFill: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
-  dimFill: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.45)' },
-  actionsStack: { width: '100%', alignItems: 'flex-start' },
   actionsContainer: {
     backgroundColor: '#fff',
-    width: '86%',
-    borderRadius: 18,
-    paddingTop: 16,
-    paddingHorizontal: 14,
-    paddingBottom: 6,
-    alignItems: 'center',
-    marginTop: 8,
+    borderRadius: 12,
+    padding: 12,
+    maxHeight: 370, 
+    width: 280,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 10,
+    elevation: 5,
   },
-  actionsCoverLarge: { width: 120, height: 170, borderRadius: 10, backgroundColor: '#f2f2f2', marginBottom: -12 },
-  actionsHeaderTitle: { alignItems: 'center', marginBottom: 6 },
+
+  actionsHeaderTitle: {
+    alignItems: 'center',
+    marginBottom: 6,
+    width: '100%',
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
   actionsTitle: {
     fontSize: 16,
     fontWeight: '700',
     color: '#0F0F0F',
+    textAlign: 'center',
+    marginBottom: 4,
   },
   actionsSubtitle: {
     fontSize: 12,
     color: '#777',
     marginTop: 2,
+    textAlign: 'center',
   },
-  actionsList: { paddingTop: 4, alignSelf: 'stretch' },
+  actionsList: {
+    paddingTop: 4,
+    alignSelf: 'stretch'
+  },
   actionRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -285,15 +297,19 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
-  actionRowLast: { borderBottomWidth: 0 },
+  actionRowLast: {
+    borderBottomWidth: 0
+  },
   actionText: {
     fontSize: 15,
     color: '#0F0F0F',
     fontWeight: '600',
   },
-  actionTextDestructive: { color: '#d62f2f' },
+  actionTextDestructive: {
+    color: '#d62f2f'
+  },
 
-  // Bottom nav (same as HomeScreen)
+  // Bottom nav
   bottomNav: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -311,6 +327,7 @@ const styles = StyleSheet.create({
   navItem: { alignItems: 'center', flex: 1 },
   navText: { fontSize: 10, color: '#666', marginTop: 4 },
   navTextActive: { fontSize: 10, color: '#2E8B57', marginTop: 4 },
+
   // Picker common styles
   searchBar: {
     flexDirection: 'row',
@@ -359,5 +376,3 @@ const styles = StyleSheet.create({
 });
 
 export default styles;
-
-
