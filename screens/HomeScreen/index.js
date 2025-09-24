@@ -11,6 +11,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styles from './styles';
 
 // Мокові дані для книг
@@ -81,6 +82,7 @@ const recommendedBook = {
 };
 
 const HomeScreen = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Усі Жанри');
 
@@ -112,7 +114,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
-
+      
       {/* Верхня панель з бургер-меню та пошуком */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
@@ -129,10 +131,11 @@ const HomeScreen = ({ navigation }) => {
         </View>
       </View>
 
-      {/* Весь контент */}
+      {/* Весь контент з доданим відступом */}
       <ScrollView
         style={styles.contentScroll}
         showsVerticalScrollIndicator={true}
+        contentContainerStyle={{ paddingBottom: 60 + insets.bottom }}
       >
         {/* Рекомендована книга */}
         <View style={styles.recommendedSection}>
@@ -261,30 +264,6 @@ const HomeScreen = ({ navigation }) => {
           contentContainerStyle={styles.horizontalBooksContainer}
         />
       </ScrollView>
-
-      {/* Нижня панель навігації */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Home')}>
-          <Ionicons name="home" size={24} color="#2E8B57" />
-          <Text style={styles.navTextActive}>Головна</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Library')}>
-          <Ionicons name="library-outline" size={24} color="#666" />
-          <Text style={styles.navText}>Бібліотека</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="download-outline" size={24} color="#666" />
-          <Text style={styles.navText}>Імпорт</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="person-outline" size={24} color="#666" />
-          <Text style={styles.navText}>Профіль</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="diamond-outline" size={24} color="#666" />
-          <Text style={styles.navText}>Преміум</Text>
-        </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 };

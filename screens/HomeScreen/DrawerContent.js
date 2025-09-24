@@ -22,19 +22,27 @@ const DrawerContent = ({ navigation }) => {
           icon={require('../../assets/Main.png')} 
           label="Головна" 
           isActive={activeItem === 'Головна'}
-          onPress={() => handleItemPress('Головна', 'Home')} 
+          onPress={() => { 
+            setActiveItem('Головна'); 
+            navigation.navigate('Home', { screen: 'MainTabs', params: { screen: 'HomeTab' } }); 
+            navigation.closeDrawer();
+          }} 
         />
         <DrawerItem 
           icon={require('../../assets/collections.png')} 
           label="Колекції" 
           isActive={activeItem === 'Колекції'}
-          onPress={() => handleItemPress('Колекції')} 
+          onPress={() => { setActiveItem('Колекції'); navigation.navigate('Home', { screen: 'Collections' }); navigation.closeDrawer(); }} 
         />
         <DrawerItem 
           icon={require('../../assets/Book.png')} 
           label="Читати далі" 
           isActive={activeItem === 'Читати далі'}
-          onPress={() => handleItemPress('Читати далі', 'ReadNext')} 
+          onPress={() => { 
+            setActiveItem('Читати далі');
+            navigation.navigate('Home', { screen: 'ReadNext' });
+            navigation.closeDrawer();
+          }} 
         />
         <DrawerItem 
           icon={require('../../assets/basket.png')} 

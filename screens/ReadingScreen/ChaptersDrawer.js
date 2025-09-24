@@ -1,11 +1,13 @@
 import React from 'react';
 import { View, Text, Modal, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import styles from './styles';
 
 const emptyBookmarksIllustration = require('../../assets/Ecran_Libery.png');
 
 const ChaptersDrawer = ({ visible, onClose, chapters = [], currentId, readIds = [], onSelectChapter, expandedIds = [], onToggleExpand, currentIndex = 0, totalCount = 0, activeTab = 'chapters', onChangeTab, bookmarks = [] }) => {
+  const insets = useSafeAreaInsets();
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <View style={styles.settingsModalOverlay}>
@@ -18,6 +20,7 @@ const ChaptersDrawer = ({ visible, onClose, chapters = [], currentId, readIds = 
           width: '85%',
           backgroundColor: '#fff',
           padding: 16,
+          paddingBottom: 16 + (insets?.bottom || 0),
           elevation: 6,
           shadowColor: '#000',
           shadowOffset: { width: 2, height: 0 },

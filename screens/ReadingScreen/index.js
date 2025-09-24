@@ -175,7 +175,7 @@ const ReadingScreen = ({ route, navigation }) => {
   const bookmarksMock = [];
 
   return (
-    <SafeAreaView style={styles.container}>
+  <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }} edges={['top', 'left', 'right']}>
       <StatusBar barStyle="dark-content" hidden={isImmersive} />
       
       {/* Верхня панель */}

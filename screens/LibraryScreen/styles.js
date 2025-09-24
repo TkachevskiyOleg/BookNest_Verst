@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#2E8B57',
   },
-  
+
   actionsOverlay: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: 12,
-    maxHeight: 370, 
+    maxHeight: 370,
     width: 280,
     shadowColor: '#000',
     shadowOpacity: 0.1,

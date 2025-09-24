@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
   },
   contentScroll: {
     flex: 1,
-    marginBottom: 60,
   },
   recommendedSection: {
     paddingHorizontal: 16,

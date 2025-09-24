@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styles from './styles';
 
 const tabs = ['Книги', 'Аудіокниги'];
@@ -52,6 +53,8 @@ const LibraryScreen = ({ navigation }) => {
   const cardRefs = useRef(new Map());
   const SCREEN_WIDTH = Dimensions.get('window').width;
   const SCREEN_HEIGHT = Dimensions.get('window').height;
+  const insets = useSafeAreaInsets();
+
 
   useEffect(() => {
     if (isActionsVisible) {
@@ -67,9 +70,9 @@ const LibraryScreen = ({ navigation }) => {
     }
   }, [isActionsVisible]);
 
-  const ALL_LANGUAGES = ['Українська','English','Deutsch','Polski','Español','Français','Italiano','中文','日本語'];
-  const ALL_PUBLISHERS = ['Віхола','Vivat','Yakaboo','КСД','Nebo BookLab','ArtHuss','Project Gutenberg','READBERRY'];
-  const ALL_GENRES = ['Детектив','Фантастика','Фентезі','Романтика','Трилер','Нон-фікшн','Мемуари','Пригоди','Історія'];
+  const ALL_LANGUAGES = ['Українська', 'English', 'Deutsch', 'Polski', 'Español', 'Français', 'Italiano', '中文', '日本語'];
+  const ALL_PUBLISHERS = ['Віхола', 'Vivat', 'Yakaboo', 'КСД', 'Nebo BookLab', 'ArtHuss', 'Project Gutenberg', 'READBERRY'];
+  const ALL_GENRES = ['Детектив', 'Фантастика', 'Фентезі', 'Романтика', 'Трилер', 'Нон-фікшн', 'Мемуари', 'Пригоди', 'Історія'];
 
   const filteredPickerData = useMemo(() => {
     const q = pickerQuery.trim().toLowerCase();
@@ -92,9 +95,9 @@ const LibraryScreen = ({ navigation }) => {
             ref.measureInWindow((x, y, w, h) => {
               const containerWidth = Math.min(SCREEN_WIDTH * 0.86, 320);
               const actionsContainerHeight = 330;
-              
+
               let left = Math.max(12, Math.min(x + w / 2 - containerWidth / 2, SCREEN_WIDTH - containerWidth - 12));
-              
+
               let top;
               const spaceBelow = SCREEN_HEIGHT - (y + h);
               const spaceAbove = y;
@@ -124,7 +127,7 @@ const LibraryScreen = ({ navigation }) => {
           }
         }}
       >
-        <Animated.Image source={require('../../assets/placeholder-cover.png')} style={[styles.cardCover, scaledItemId === item.id && [ { transform: [{ scale: coverScale }] }, styles.coverRaised ]]} />
+        <Animated.Image source={require('../../assets/placeholder-cover.png')} style={[styles.cardCover, scaledItemId === item.id && [{ transform: [{ scale: coverScale }] }, styles.coverRaised]]} />
         <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>
         <View style={styles.cardMetaRow}>
           <View style={styles.dot} />
@@ -200,7 +203,7 @@ const LibraryScreen = ({ navigation }) => {
         keyExtractor={item => item.id}
         numColumns={2}
         columnWrapperStyle={styles.gridRow}
-        contentContainerStyle={styles.grid}
+        contentContainerStyle={[styles.grid, { paddingBottom: 60 + insets.bottom }]}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />
@@ -214,11 +217,11 @@ const LibraryScreen = ({ navigation }) => {
           {selectedItem && (
             <View style={styles.actionsStack}>
               <Animated.View style={[styles.actionsContainer, { opacity: sheetOpacity, position: 'absolute', top: modalPos.top, left: modalPos.left, width: Math.min(SCREEN_WIDTH * 0.86, 320) }]}>
-                  <View style={styles.actionsHeaderTitle}>
-                    <Text style={styles.actionsTitle} numberOfLines={1}>{selectedItem.title}</Text>
-                    <Text style={styles.actionsSubtitle}>{selectedItem.format?.toUpperCase() || 'PDF'}</Text>
-                  </View>
-                  <View style={styles.actionsList}>
+                <View style={styles.actionsHeaderTitle}>
+                  <Text style={styles.actionsTitle} numberOfLines={1}>{selectedItem.title}</Text>
+                  <Text style={styles.actionsSubtitle}>{selectedItem.format?.toUpperCase() || 'PDF'}</Text>
+                </View>
+                <View style={styles.actionsList}>
                   {[
                     { key: 'info', label: 'Інформація', icon: ['information-circle-outline', '#222'] },
                     { key: 'read', label: 'Читати', icon: ['book-outline', '#222'], onPress: () => { setIsActionsVisible(false); navigation.navigate('Reading', { book: selectedItem }); } },
@@ -240,8 +243,8 @@ const LibraryScreen = ({ navigation }) => {
                       </TouchableOpacity>
                     );
                   })}
-                  </View>
-                </Animated.View>
+                </View>
+              </Animated.View>
             </View>
           )}
         </View>
@@ -251,7 +254,7 @@ const LibraryScreen = ({ navigation }) => {
       <Modal visible={isSortVisible} transparent animationType="slide" onRequestClose={() => setIsSortVisible(false)}>
         <View style={styles.sheetOverlay}>
           <TouchableOpacity style={{ flex: 1 }} onPress={() => setIsSortVisible(false)} />
-          <View style={styles.sheetContainer}>
+          <View style={[styles.sheetContainer, { paddingBottom: 20 + (insets?.bottom || 0) }]}>
             <View style={styles.sheetHandle} />
             <View style={styles.sheetHeaderRow}>
               <TouchableOpacity onPress={() => setIsSortVisible(false)}>
@@ -281,7 +284,7 @@ const LibraryScreen = ({ navigation }) => {
       <Modal visible={isFilterVisible} transparent animationType="slide" onRequestClose={() => setIsFilterVisible(false)}>
         <View style={styles.sheetOverlay}>
           <TouchableOpacity style={{ flex: 1 }} onPress={() => setIsFilterVisible(false)} />
-          <View style={styles.sheetContainer}>
+          <View style={[styles.sheetContainer, { paddingBottom: 20 + (insets?.bottom || 0) }]}>
             <View style={styles.sheetHandle} />
             <View style={styles.sheetHeaderRow}>
               <TouchableOpacity onPress={() => setIsFilterVisible(false)}>
@@ -335,7 +338,7 @@ const LibraryScreen = ({ navigation }) => {
         <Modal visible transparent animationType="slide" onRequestClose={() => { setIsLangPickerVisible(false); setIsPublisherPickerVisible(false); setIsGenrePickerVisible(false); }}>
           <View style={styles.sheetOverlay}>
             <TouchableOpacity style={{ flex: 1 }} onPress={() => { setIsLangPickerVisible(false); setIsPublisherPickerVisible(false); setIsGenrePickerVisible(false); }} />
-            <View style={styles.sheetContainer}>
+            <View style={[styles.sheetContainer, { paddingBottom: 20 + (insets?.bottom || 0) }]}>
               <View style={styles.sheetHandle} />
               <View style={styles.sheetHeaderRow}>
                 <TouchableOpacity onPress={() => { setIsLangPickerVisible(false); setIsPublisherPickerVisible(false); setIsGenrePickerVisible(false); }}>
@@ -367,29 +370,6 @@ const LibraryScreen = ({ navigation }) => {
           </View>
         </Modal>
       )}
-      {/* Bottom nav */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Home')}>
-          <Ionicons name="home" size={24} color="#666" />
-          <Text style={styles.navText}>Головна</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="library-outline" size={24} color="#2E8B57" />
-          <Text style={styles.navTextActive}>Бібліотека</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="download-outline" size={24} color="#666" />
-          <Text style={styles.navText}>Імпорт</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="person-outline" size={24} color="#666" />
-          <Text style={styles.navText}>Профіль</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="diamond-outline" size={24} color="#666" />
-          <Text style={styles.navText}>Преміум</Text>
-        </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 };

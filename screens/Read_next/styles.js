@@ -11,10 +11,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     paddingTop: 40,
     paddingHorizontal: 16,
-    paddingBottom: 16,
-    backgroundColor: '#f5f5f5',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    paddingBottom: 12,
+    backgroundColor: '#fff',
+    borderBottomWidth: 0,
     position: 'relative',
   },
   backButton: {
@@ -23,14 +22,14 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: '700',
-    color: '#000',
+    color: '#0F0F0F',
     textAlign: 'center',
   },
   listContent: {
     padding: 16,
-    paddingBottom: 32,
+    paddingBottom: 80,
   },
   card: {
     flexDirection: 'row',
@@ -46,6 +45,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#f0f0f0',
     alignItems: 'center',
+    marginHorizontal: 0,
   },
   cover: {
     width: 60,
@@ -97,14 +97,69 @@ const styles = StyleSheet.create({
     minWidth: 32,
     textAlign: 'right',
   },
-  continueButton: {
-    
-  },
   continueButtonText: {
     color: '#2E8B57', 
     fontSize: 14,
     fontWeight: '600',
   },
+  // Left swipe single button
+  leftActionContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 0,
+    marginLeft: 16,   // екранний відступ
+    marginRight: -120, // накладання картки на кнопку без проміжку
+  },
+  pinAction: {
+    flexDirection: 'column',
+    width: 120,
+    height: '90%',
+    backgroundColor: '#2E8B57',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pinActionText: { color: '#fff', fontWeight: '700' },
+
+  // Right swipe single button
+  rightActionContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingRight: 0,
+    marginRight: 16,  // екранний відступ
+    marginLeft: -120,  // накладання картки на кнопку без проміжку
+  },
+  deleteAction: {
+    width: 120,
+    height: '90%',
+    backgroundColor: '#ef4444',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  deleteActionText: { color: '#fff', fontWeight: '700' },
+
+  // Toast
+  toast: {
+    position: 'absolute',
+    left: 16,
+    right: 16,
+    bottom: 24,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    borderTopWidth: 3,
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 5,
+  },
+  toastText: { color: '#0F0F0F', textAlign: 'center' },
 });
 
 export default styles;

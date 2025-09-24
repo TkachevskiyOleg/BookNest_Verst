@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, Modal, ScrollView, StatusBar } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import styles from './styles';
@@ -18,6 +19,7 @@ const SettingsModal = ({
   onBrightnessChange,
   onBrightnessEnd,
 }) => {
+  const insets = useSafeAreaInsets();
   const {
     isDarkTheme,
     brightness,
@@ -65,7 +67,7 @@ const SettingsModal = ({
     >
       <View style={styles.settingsModalOverlay}>
         <TouchableOpacity style={styles.settingsModalOverlayTouchable} activeOpacity={1} onPress={onClose} />
-        <View style={styles.settingsModalContent}>
+        <View style={[styles.settingsModalContent, { paddingBottom: 20 + (insets?.bottom || 0) }]}>
           <View style={styles.settingsModalHeader}>
             <Text style={styles.settingsModalTitle}>Налаштування</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>

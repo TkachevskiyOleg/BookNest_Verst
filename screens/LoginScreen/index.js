@@ -11,6 +11,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 const LoginScreen = () => {
   const navigation = useNavigation();

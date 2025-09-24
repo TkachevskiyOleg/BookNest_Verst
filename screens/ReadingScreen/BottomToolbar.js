@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity, Image, Text } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styles from './styles';
 
 const leftArrow = require('../../assets/left_arrow.png');
@@ -20,8 +21,9 @@ const BottomToolbar = ({
   onChaptersPress,
   onSearchPress,
 }) => {
+  const insets = useSafeAreaInsets();
   return (
-    <View style={styles.toolbarPanel}>
+    <View style={[styles.toolbarPanel, { paddingBottom: 20 + (insets?.bottom || 0) }]}>
       <View style={styles.progressContainer}>
         <Text style={styles.progressText}>{progress}%</Text>
         <View style={styles.progressBar}>
