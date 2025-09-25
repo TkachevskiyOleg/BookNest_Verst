@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: -17, // злегка підняти кнопку
   },
   pinActionText: { color: '#fff', fontWeight: '700' },
 
@@ -139,6 +140,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: -17, // злегка підняти кнопку
   },
   deleteActionText: { color: '#fff', fontWeight: '700' },
 

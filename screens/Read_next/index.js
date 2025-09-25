@@ -50,6 +50,10 @@ const ReadNextScreen = ({ navigation }) => {
   const [books, setBooks] = useState(readingBooksSeed);
   const [toast, setToast] = useState({ visible: false, text: '', mode: 'success' });
   const toastOpacity = useRef(new Animated.Value(0)).current;
+  // Width of fully sized action button vs how much of it we allow to peek out
+  const ACTION_BUTTON_WIDTH = 120;
+  const ACTION_PEEK_WIDTH = 96; // increase peek by ~1 cm more
+  const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
   const showToast = (text, mode = 'success') => {
     setToast({ visible: true, text, mode });
@@ -71,33 +75,87 @@ const ReadNextScreen = ({ navigation }) => {
     showToast(`Книгу видалено назавжди\n«${item.title}» видалено назавжди`, 'danger');
   };
 
-  const renderLeftActions = (item) => (
-    <View style={styles.leftActionContainer}>
-      <TouchableOpacity style={styles.pinAction} onPress={() => addToPostponed(item)} activeOpacity={0.9}>
-        <Image source={postponedPng} style={{ width: 22, height: 22, tintColor: '#fff', resizeMode: 'contain', marginBottom: 8 }} />
-        <Text style={styles.pinActionText}>Закинути</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  const renderLeftActions = (item, progress, dragX) => {
+    const opacity = progress.interpolate({
+      inputRange: [0, 0.25, 1],
+      outputRange: [0, 0.7, 1],
+      extrapolate: 'clamp',
+    });
+    const scale = dragX.interpolate({
+      inputRange: [0, 20, ACTION_PEEK_WIDTH],
+      outputRange: [0.9, 0.97, 1],
+      extrapolate: 'clamp',
+    });
+    const translateX = dragX.interpolate({
+      inputRange: [0, ACTION_PEEK_WIDTH],
+      outputRange: [-ACTION_PEEK_WIDTH * 0.3, 0],
+      extrapolate: 'clamp',
+    });
+    return (
+      <Animated.View style={[
+        styles.leftActionContainer,
+        { width: ACTION_PEEK_WIDTH, flex: 0, marginLeft: 0, marginRight: 0, transform: [{ translateX }] },
+      ]}> 
+        <AnimatedTouchable
+          style={[
+            styles.pinAction,
+            { width: ACTION_BUTTON_WIDTH, opacity, transform: [{ scale }] },
+          ]} 
+          onPress={() => addToPostponed(item)}
+          activeOpacity={0.9}
+        >
+          <Image source={postponedPng} style={{ width: 22, height: 22, tintColor: '#fff', resizeMode: 'contain', marginBottom: 8 }} />
+          <Text style={styles.pinActionText}>Закинути</Text>
+        </AnimatedTouchable>
+      </Animated.View>
+    );
+  };
 
-  const renderRightActions = (item) => (
-    <View style={styles.rightActionContainer}>
-      <TouchableOpacity style={styles.deleteAction} onPress={() => deleteBook(item)} activeOpacity={0.9}>
-        <Image source={deletePng} style={{ width: 24, height: 24, tintColor: '#fff', resizeMode: 'contain', marginBottom: 8 }} />
-        <Text style={styles.deleteActionText}>Видалити</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  const renderRightActions = (item, progress, dragX) => {
+    const opacity = progress.interpolate({
+      inputRange: [0, 0.25, 1],
+      outputRange: [0, 0.7, 1],
+      extrapolate: 'clamp',
+    });
+    const scale = dragX.interpolate({
+      inputRange: [-ACTION_PEEK_WIDTH, -20, 0],
+      outputRange: [1, 0.97, 0.9],
+      extrapolate: 'clamp',
+    });
+    const translateX = dragX.interpolate({
+      inputRange: [-ACTION_PEEK_WIDTH, 0],
+      outputRange: [0, ACTION_PEEK_WIDTH * 0.3],
+      extrapolate: 'clamp',
+    });
+    return (
+      <Animated.View style={[
+        styles.rightActionContainer,
+        { width: ACTION_PEEK_WIDTH, flex: 0, marginLeft: 0, marginRight: 0, transform: [{ translateX }] },
+      ]}> 
+        <AnimatedTouchable
+          style={[
+            styles.deleteAction,
+            { width: ACTION_BUTTON_WIDTH, opacity, transform: [{ scale }] },
+          ]} 
+          onPress={() => deleteBook(item)}
+          activeOpacity={0.9}
+        >
+          <Image source={deletePng} style={{ width: 24, height: 24, tintColor: '#fff', resizeMode: 'contain', marginBottom: 8 }} />
+          <Text style={styles.deleteActionText}>Видалити</Text>
+        </AnimatedTouchable>
+      </Animated.View>
+    );
+  };
 
   const renderBook = ({ item }) => (
         <Swipeable
-          renderLeftActions={() => renderLeftActions(item)}
-          renderRightActions={() => renderRightActions(item)}
+          renderLeftActions={(progress, dragX) => renderLeftActions(item, progress, dragX)}
+          renderRightActions={(progress, dragX) => renderRightActions(item, progress, dragX)}
           overshootLeft={false}
           overshootRight={false}
-          friction={1}
-          leftThreshold={80}
-          rightThreshold={80}
+          friction={1.2}
+          leftThreshold={40}
+          rightThreshold={40}
         >
       <View style={styles.card}>
         <Image source={{ uri: item.cover }} style={styles.cover} defaultSource={require('../../assets/placeholder-cover.png')} />
