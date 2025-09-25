@@ -102,14 +102,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  // Left swipe single button
   leftActionContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 0,
-    marginLeft: 16,   // екранний відступ
-    marginRight: -120, // накладання картки на кнопку без проміжку
+    marginLeft: 16,   
+    marginRight: -120, 
   },
   pinAction: {
     flexDirection: 'column',
@@ -119,19 +118,18 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -17, // злегка підняти кнопку
+    marginTop: -17, 
   },
   pinActionText: { color: '#fff', fontWeight: '700' },
 
-  // Right swipe single button
   rightActionContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
     paddingRight: 0,
-    marginRight: 16,  // екранний відступ
-    marginLeft: -120,  // накладання картки на кнопку без проміжку
+    marginRight: 16,  
+    marginLeft: -120,  
   },
   deleteAction: {
     width: 120,
@@ -140,11 +138,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -17, // злегка підняти кнопку
+    marginTop: -17, 
   },
   deleteActionText: { color: '#fff', fontWeight: '700' },
 
-  // Toast
+ 
   toast: {
     position: 'absolute',
     left: 16,

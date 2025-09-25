@@ -50,9 +50,8 @@ const ReadNextScreen = ({ navigation }) => {
   const [books, setBooks] = useState(readingBooksSeed);
   const [toast, setToast] = useState({ visible: false, text: '', mode: 'success' });
   const toastOpacity = useRef(new Animated.Value(0)).current;
-  // Width of fully sized action button vs how much of it we allow to peek out
   const ACTION_BUTTON_WIDTH = 120;
-  const ACTION_PEEK_WIDTH = 96; // increase peek by ~1 cm more
+  const ACTION_PEEK_WIDTH = 96; 
   const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
   const showToast = (text, mode = 'success') => {
