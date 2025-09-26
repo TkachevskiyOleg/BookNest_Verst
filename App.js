@@ -15,6 +15,7 @@ import VerificationScreen from './screens/VerificationScreen';
 import HomeScreen from './screens/HomeScreen';
 import LibraryScreen from './screens/LibraryScreen';
 import ReadNextScreen from './screens/Read_next';
+import TrashScreen from './screens/TrashScreen';
 import ReadingScreen from './screens/ReadingScreen'; 
 import CustomDrawerContent from './screens/HomeScreen/DrawerContent';
 import CategoryScreen from './screens/CategoryScreen';
@@ -26,6 +27,11 @@ import CollectionAudio from './screens/CollectionsScreen/AudioBooks';
 import CollectionSaved from './screens/CollectionsScreen/Saved';
 import CollectionDownloaded from './screens/CollectionsScreen/Downloaded';
 import CollectionPostponed from './screens/CollectionsScreen/Postponed';
+import SettingsScreen from './screens/SettingsScreen';
+import SettingsLanguage from './screens/SettingsScreen/Language';
+import SettingsChangePassword from './screens/SettingsScreen/ChangePassword';
+import SettingsDevices from './screens/SettingsScreen/Devices';
+import SettingsForgotPassword from './screens/SettingsScreen/EmailConfirm';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -138,6 +144,7 @@ function MainStack() {
       <Stack.Screen name="MainTabs" component={MainTabs} />
       <Stack.Screen name="Collections" component={CollectionsScreen}/>
       <Stack.Screen name="ReadNext" component={ReadNextScreen}/>
+      <Stack.Screen name="Trash" component={TrashScreen}/>
       <Stack.Screen name="Reading" component={ReadingScreen}/> 
       <Stack.Screen name="Category" component={CategoryScreen}/>
       <Stack.Screen name="FilterLanguage" component={LanguageScreen}/>
@@ -147,6 +154,11 @@ function MainStack() {
       <Stack.Screen name="CollectionSaved" component={CollectionSaved}/>
       <Stack.Screen name="CollectionDownloaded" component={CollectionDownloaded}/>
       <Stack.Screen name="CollectionPostponed" component={CollectionPostponed}/>
+      <Stack.Screen name="Settings" component={SettingsScreen}/>
+      <Stack.Screen name="SettingsLanguage" component={SettingsLanguage}/>
+      <Stack.Screen name="SettingsChangePassword" component={SettingsChangePassword}/>
+      <Stack.Screen name="SettingsDevices" component={SettingsDevices}/>
+      <Stack.Screen name="SettingsForgotPassword" component={SettingsForgotPassword}/>
     </Stack.Navigator>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, FlatList, Animated } from 'react-native';
+import { View, Text, Image, TouchableOpacity, FlatList, Animated, Easing } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Swipeable } from 'react-native-gesture-handler';
 import styles from './styles';
@@ -50,18 +50,27 @@ const ReadNextScreen = ({ navigation }) => {
   const [books, setBooks] = useState(readingBooksSeed);
   const [toast, setToast] = useState({ visible: false, text: '', mode: 'success' });
   const toastOpacity = useRef(new Animated.Value(0)).current;
+  const toastProgress = useRef(new Animated.Value(0)).current; // width animation
+  const [toastTrackWidth, setToastTrackWidth] = useState(0);
   const ACTION_BUTTON_WIDTH = 120;
   const ACTION_PEEK_WIDTH = 96; 
   const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
   const showToast = (text, mode = 'success') => {
     setToast({ visible: true, text, mode });
-    Animated.timing(toastOpacity, { toValue: 1, duration: 160, useNativeDriver: true }).start(() => {
-      setTimeout(() => {
-        Animated.timing(toastOpacity, { toValue: 0, duration: 160, useNativeDriver: true }).start(() => {
-          setToast({ visible: false, text: '', mode });
-        });
-      }, 1600);
+    const trackWidth = toastTrackWidth || 260; // fallback width
+    toastOpacity.setValue(0);
+    toastProgress.setValue(trackWidth);
+    Animated.timing(toastOpacity, { toValue: 1, duration: 160, useNativeDriver: true }).start();
+    Animated.timing(toastProgress, {
+      toValue: 0,
+      duration: 2000,
+      easing: Easing.linear,
+      useNativeDriver: false,
+    }).start(() => {
+      Animated.timing(toastOpacity, { toValue: 0, duration: 160, useNativeDriver: true }).start(() => {
+        setToast({ visible: false, text: '', mode });
+      });
     });
   };
 
@@ -193,7 +202,12 @@ const ReadNextScreen = ({ navigation }) => {
       />
 
       {toast.visible && (
-        <Animated.View style={[styles.toast, { opacity: toastOpacity, borderTopColor: toast.mode === 'danger' ? '#e11d48' : '#2E8B57' }]}> 
+        <Animated.View style={[styles.toast, { opacity: toastOpacity }]}> 
+          <View style={styles.toastProgressTrack} onLayout={(e) => setToastTrackWidth(e.nativeEvent.layout.width)} />
+          <Animated.View style={[
+            styles.toastProgressFill,
+            { width: toastProgress, backgroundColor: toast.mode === 'danger' ? '#e11d48' : '#2E8B57' },
+          ]} />
           <Text style={styles.toastText}>{toast.text}</Text>
         </Animated.View>
       )}

@@ -48,7 +48,7 @@ const DrawerContent = ({ navigation }) => {
           icon={require('../../assets/basket.png')} 
           label="Корзина" 
           isActive={activeItem === 'Корзина'}
-          onPress={() => handleItemPress('Корзина')} 
+          onPress={() => { setActiveItem('Корзина'); navigation.navigate('Home', { screen: 'Trash' }); navigation.closeDrawer(); }} 
         />
       </View>
       <View style={styles.divider} />
@@ -57,7 +57,7 @@ const DrawerContent = ({ navigation }) => {
           icon={require('../../assets/settings.png')} 
           label="Налаштування" 
           isActive={activeItem === 'Налаштування'}
-          onPress={() => handleItemPress('Налаштування')} 
+          onPress={() => { setActiveItem('Налаштування'); navigation.navigate('Home', { screen: 'Settings' }); navigation.closeDrawer(); }} 
         />
         <DrawerItem 
           icon={require('../../assets/feedback.png')} 

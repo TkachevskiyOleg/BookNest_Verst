@@ -152,14 +152,17 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: 16,
     paddingHorizontal: 16,
-    borderTopWidth: 3,
+    borderTopWidth: 0,
     shadowColor: '#000',
     shadowOpacity: 0.15,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 4 },
     elevation: 5,
+    overflow: 'hidden',
   },
   toastText: { color: '#0F0F0F', textAlign: 'center' },
+  toastProgressTrack: { position: 'absolute', left: 0, right: 0, top: 0, height: 3, backgroundColor: '#eaeaea' },
+  toastProgressFill: { position: 'absolute', left: 0, top: 0, height: 3, backgroundColor: '#2E8B57' },
 });
 
 export default styles;
